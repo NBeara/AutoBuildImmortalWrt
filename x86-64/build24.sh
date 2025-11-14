@@ -39,9 +39,6 @@ else
   ls -lah /home/build/immortalwrt/packages/
 fi
 
-echo "克隆 rkp-ipid 源码到 package 目录"
-git clone https://github.com/sirpdboy/rkp-ipid.git package/rkp-ipid
-
 # 输出调试信息
 echo "$(date '+%Y-%m-%d %H:%M:%S') - 开始构建固件..."
 
