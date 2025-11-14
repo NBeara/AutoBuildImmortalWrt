@@ -21,7 +21,7 @@ echo "cat pppoe-settings"
 cat /home/build/immortalwrt/files/etc/config/pppoe-settings
 
 echo "克隆 rkp-ipid 源码到 package 目录"
-git clone https://github.com/sirpdboy/rkp-ipid.git package/rkp-ipid
+git clone https://github.com/CHN-beta/rkp-ipid.git package/rkp-ipid
 
 if [ -z "$CUSTOM_PACKAGES" ]; then
   echo "⚪️ 未选择 任何第三方软件包"
