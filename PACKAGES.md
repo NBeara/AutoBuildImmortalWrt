@@ -27,4 +27,3 @@
 | luci-app-unishare             | 统一文件共享 | webdav共享                      |
 | luci-app-uninstall             | 高级卸载1.1.2 | [用于彻底卸载插件 点这里出处](https://www.bilibili.com/video/BV1dK1xBVEHF)                     |
 | luci-theme-aurora      | 极光主题 0.8                 | [eamonxg/luci-theme-aurora](https://github.com/eamonxg/luci-theme-aurora)                 |
-| ua2f | 校园网UA代理 | [lucikap/luci-app-ua2f](https://github.com/lucikap/luci-app-ua2f) |
