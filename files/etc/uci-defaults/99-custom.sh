@@ -127,6 +127,45 @@ elif [ "$count" -gt 1 ]; then
     uci commit network
 fi
 
+# ==============================
+# 配置 USB 共享网络 / USB Tethering
+# 适用于 Android 手机 USB 网络共享，常见设备名为 usb0
+# ==============================
+echo "Configuring USB tethering interface..." >>$LOGFILE
+# 删除旧的 usb 接口配置，避免重复
+uci -q delete network.usb
+# 添加 USB 网络接口
+uci set network.usb='interface'
+uci set network.usb.proto='dhcp'
+uci set network.usb.device='usb0'
+uci set network.usb.metric='20'
+uci set network.usb.auto='1'
+# 如希望使用手机下发的 DNS，可以注释下面三行
+uci set network.usb.peerdns='0'
+uci add_list network.usb.dns='223.5.5.5'
+uci add_list network.usb.dns='119.29.29.29'
+uci commit network
+# 将 usb 接口加入 wan 防火墙区域
+WAN_ZONE="$(uci show firewall | grep '=zone' | cut -d. -f2 | while read z; do
+    name="$(uci -q get firewall.$z.name)"
+    if [ "$name" = "wan" ]; then
+        echo "$z"
+        break
+    fi
+done)"
+if [ -n "$WAN_ZONE" ]; then
+    # 避免重复添加
+    if ! uci -q get firewall.${WAN_ZONE}.network | grep -qw usb; then
+        uci add_list firewall.${WAN_ZONE}.network='usb'
+        echo "Added usb interface to firewall wan zone: $WAN_ZONE" >>$LOGFILE
+    else
+        echo "usb already exists in firewall wan zone." >>$LOGFILE
+    fi
+    uci commit firewall
+else
+    echo "Warning: wan firewall zone not found, skip adding usb to firewall." >>$LOGFILE
+fi
+
 # 若安装了dockerd 则设置docker的防火墙规则
 # 扩大docker涵盖的子网范围 '172.16.0.0/12'
 # 方便各类docker容器的端口顺利通过防火墙 
